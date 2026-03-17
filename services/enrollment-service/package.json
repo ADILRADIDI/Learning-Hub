@@ -1,7 +1,7 @@
 {
-  "name": "learning-platform-grading-service",
+  "name": "learning-platform-enrollment-service",
   "version": "1.0.0",
-  "description": "Grading Service for Learning Platform",
+  "description": "Enrollment Service for Learning Platform",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -10,7 +10,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
-  "keywords": ["grading", "microservice"],
+  "keywords": [
+    "enrollment",
+    "microservice"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
@@ -20,8 +23,7 @@
     "joi": "^17.9.2",
     "morgan": "^1.10.0",
     "helmet": "^7.0.0",
-    "cors": "^2.8.5",
-    "axios": "^1.4.0"
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.22",

@@ -1,15 +1,14 @@
 {
   "name": "learning-platform-auth-service",
   "version": "1.0.0",
-  "description": "Authentication Service for Learning Platform",
+  "description": "Authentication Service for Learning Platform - Users & JWT",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "jest --coverage",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "lint:fix": "eslint . --fix"
   },
   "keywords": [
     "authentication",
