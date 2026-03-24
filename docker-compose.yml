@@ -1,0 +1,117 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: learning-platform-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: learning-platform
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    networks:
+      - learning-platform
+    restart: unless-stopped
+
+  gateway:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.gateway
+    container_name: learning-platform-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      AUTH_SERVICE_URL: http://auth-service:3001
+      COURSE_SERVICE_URL: http://course-service:3002
+      ENROLLMENT_SERVICE_URL: http://enrollment-service:3003
+    depends_on:
+      - auth-service
+      - course-service
+      - enrollment-service
+    networks:
+      - learning-platform
+    volumes:
+      - ./gateway:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  auth-service:
+    build:
+      context: ./services/auth-service
+      dockerfile: ../../docker/Dockerfile.service
+    container_name: learning-platform-auth
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      SERVICE_NAME: auth-service
+      MONGODB_URI: mongodb://admin:admin123@mongodb:27017/learning-platform?authSource=admin
+      JWT_SECRET: your-secret-key-change-in-production
+      JWT_EXPIRE: 24h
+    depends_on:
+      - mongodb
+    networks:
+      - learning-platform
+    volumes:
+      - ./services/auth-service:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  course-service:
+    build:
+      context: ./services/course-service
+      dockerfile: ../../docker/Dockerfile.service
+    container_name: learning-platform-course
+    ports:
+      - "3002:3002"
+    environment:
+      NODE_ENV: development
+      PORT: 3002
+      SERVICE_NAME: course-service
+      MONGODB_URI: mongodb://admin:admin123@mongodb:27017/learning-platform?authSource=admin
+    depends_on:
+      - mongodb
+    networks:
+      - learning-platform
+    volumes:
+      - ./services/course-service:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  enrollment-service:
+    build:
+      context: ./services/enrollment-service
+      dockerfile: ../../docker/Dockerfile.service
+    container_name: learning-platform-enrollment
+    ports:
+      - "3003:3003"
+    environment:
+      NODE_ENV: development
+      PORT: 3003
+      SERVICE_NAME: enrollment-service
+      MONGODB_URI: mongodb://admin:admin123@mongodb:27017/learning-platform?authSource=admin
+    depends_on:
+      - mongodb
+    networks:
+      - learning-platform
+    volumes:
+      - ./services/enrollment-service:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+networks:
+  learning-platform:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
