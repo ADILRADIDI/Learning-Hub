@@ -1,0 +1,24 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Clean install - remove node_modules if they exist and install fresh
+RUN rm -rf node_modules package-lock.json && npm install --legacy-peer-deps && npm cache clean --force
+
+# Copy source code
+COPY public ./public
+COPY src ./src
+COPY tailwind.config.js postcss.config.js ./
+
+# Expose port
+EXPOSE 3000
+
+# Set environment
+ENV CI=false
+ENV SKIP_PREFLIGHT_CHECK=true
+
+# Start React dev server
+CMD ["npm", "start"]

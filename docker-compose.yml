@@ -17,16 +17,38 @@ services:
       - learning-platform
     restart: unless-stopped
 
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: learning-platform-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:4000/api
+      NODE_ENV: development
+      SKIP_PREFLIGHT_CHECK: true
+    depends_on:
+      - gateway
+    networks:
+      - learning-platform
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - /app/node_modules
+    restart: unless-stopped
+
   gateway:
     build:
       context: .
       dockerfile: docker/Dockerfile.gateway
     container_name: learning-platform-gateway
     ports:
-      - "3000:3000"
+      - "4000:3000"
     environment:
       NODE_ENV: development
       PORT: 3000
+      JWT_SECRET: learning-hub-super-secret-key-2024-secure-production
       AUTH_SERVICE_URL: http://auth-service:3001
       COURSE_SERVICE_URL: http://course-service:3002
       ENROLLMENT_SERVICE_URL: http://enrollment-service:3003
@@ -53,7 +75,7 @@ services:
       PORT: 3001
       SERVICE_NAME: auth-service
       MONGODB_URI: mongodb://admin:admin123@mongodb:27017/learning-platform?authSource=admin
-      JWT_SECRET: your-secret-key-change-in-production
+      JWT_SECRET: learning-hub-super-secret-key-2024-secure-production
       JWT_EXPIRE: 24h
     depends_on:
       - mongodb

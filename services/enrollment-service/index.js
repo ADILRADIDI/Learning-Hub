@@ -90,7 +90,6 @@ const Enrollment = mongoose.model('enrollment', enrollmentSchema);
 // ============================================
 
 const enrollmentSchema_Joi = Joi.object({
-  student: Joi.string().required(),
   course: Joi.string().required(),
   status: Joi.string().valid('active', 'completed', 'dropped').default('active')
 });
@@ -128,20 +127,21 @@ app.get('/enrollments', async (req, res) => {
   }
 });
 
-// Get enrollment by ID
-app.get('/enrollments/:id', async (req, res) => {
+// Get current user enrollments (from gateway auth header)
+app.get('/enrollments/me', async (req, res) => {
   try {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return res.status(400).json({ error: 'Invalid enrollment ID' });
+    const userId = req.headers['x-user-id'];
+
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const enrollment = await Enrollment.findById(req.params.id);
+    const enrollments = await Enrollment.find({ student: userId });
 
-    if (!enrollment) {
-      return res.status(404).json({ error: 'Enrollment not found' });
-    }
-
-    res.json(enrollment);
+    res.json({
+      total: enrollments.length,
+      enrollments
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -165,13 +165,40 @@ app.get('/enrollments/user/:userId', async (req, res) => {
   }
 });
 
+// Get enrollment by ID
+app.get('/enrollments/:id', async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid enrollment ID' });
+    }
+
+    const enrollment = await Enrollment.findById(req.params.id);
+
+    if (!enrollment) {
+      return res.status(404).json({ error: 'Enrollment not found' });
+    }
+
+    res.json(enrollment);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Create enrollment
 app.post('/enrollments', async (req, res) => {
   try {
+    const userId = req.headers['x-user-id'];
+
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
     const { error, value } = enrollmentSchema_Joi.validate(req.body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
+
+    value.student = userId;
 
     // Check if already enrolled
     const existingEnrollment = await Enrollment.findOne({

@@ -113,7 +113,6 @@ const Course = mongoose.model('courses', courseSchema);
 const courseSchema_Joi = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().required(),
-  instructor: Joi.string().required(),
   duration: Joi.number().default(0),
   level: Joi.string().valid('beginner', 'intermediate', 'advanced').default('beginner'),
   category: Joi.string(),
@@ -171,10 +170,23 @@ app.get('/courses/:id', async (req, res) => {
 // Create course
 app.post('/courses', async (req, res) => {
   try {
+    const userId = req.headers['x-user-id'];
+    const userRole = req.headers['x-user-role'];
+
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    if (!['instructor', 'admin'].includes(userRole)) {
+      return res.status(403).json({ error: 'Only instructors or admins can create courses' });
+    }
+
     const { error, value } = courseSchema_Joi.validate(req.body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
+
+    value.instructor = userId;
 
     const newCourse = new Course(value);
     await newCourse.save();

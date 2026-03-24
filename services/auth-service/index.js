@@ -70,7 +70,7 @@ const userSchema = new mongoose.Schema({
   lastname: String,
   role: {
     type: String,
-    enum: ['student', 'instructor', 'admin'],
+    enum: ['student', 'admin'],
     default: 'student'
   },
   createdAt: {
@@ -95,7 +95,7 @@ const registerSchema = Joi.object({
   password: Joi.string().min(6).required(),
   firstname: Joi.string(),
   lastname: Joi.string(),
-  role: Joi.string().valid('student', 'instructor', 'admin').default('student')
+  role: Joi.string().valid('student', 'admin').default('student')
 });
 
 const loginSchema = Joi.object({

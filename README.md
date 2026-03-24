@@ -1,132 +1,14 @@
-<<<<<<< HEAD
-# Getting Started with Create React App
+Student Account:
+  Username: student1
+  Email: student1@example.com
+  Password: password123
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Instructor Account:
+  Username: instructor1
+  Email: instructor1@example.com
+  Password: password123
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-=======
-# Learning Platform - Microservices Architecture
-
-## Description
-
-Plateforme de gestion de cours avec trois microservices Node.js essentiels.
-
-## Architecture
-
-```
-Gateway (3000) -> Auth (3001), Course (3002), Enrollment (3003) -> MongoDB
-```
-
-## Services
-
-### Auth Service (3001)
-- Collection: users
-- Register, Login, Verify JWT, Logout
-
-### Course Service (3002)
-- Collection: courses
-- CRUD operations for courses
-
-### Enrollment Service (3003)
-- Collection: enrollment
-- Student enrollments and progress tracking
-
-## Quick Start
-
-```bash
-docker-compose up -d
-curl http://localhost:3000/health
-```
-
-## Project Structure
-
-```
-HSM-z-s-cloud/
-├── services/
-│   ├── auth-service/
-│   ├── course-service/
-│   └── enrollment-service/
-├── gateway/
-├── docker/
-│   ├── Dockerfile.gateway
-│   └── Dockerfile.service
-├── docker-compose.yml
-└── .env.example
-```
-
-## Technology Stack
-
-- Node.js 18+
-- Express.js
-- MongoDB
-- Docker & Docker Compose
-
----
-
-**Version**: 1.0.0 | **Updated**: March 17, 2026
->>>>>>> 46a12dae70f7e342caa056733514c3f86dcdd3f7
+Admin Account:
+  Username: admin
+  Email: admin@example.com
+  Password: password123
